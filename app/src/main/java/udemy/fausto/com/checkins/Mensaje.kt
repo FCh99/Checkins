@@ -21,6 +21,9 @@ class Mensaje {
                     mensaje = "Hubo un problema en la solicitud"
 
                 }
+                Errores.NO_HAY_APP_FSQR-> {
+                    mensaje = "NO hay Aplicación de Foursquare"
+                }
 
             }
             Toast.makeText(context, mensaje, Toast.LENGTH_LONG).show()
