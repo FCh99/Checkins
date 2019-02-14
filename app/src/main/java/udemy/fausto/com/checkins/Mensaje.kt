@@ -24,6 +24,12 @@ class Mensaje {
                 Errores.NO_HAY_APP_FSQR-> {
                     mensaje = "NO hay Aplicación de Foursquare"
                 }
+                Errores.ERROR_CONEXION_FSQR -> {
+                    mensaje= "No se puedo completar la conexión a Foursquare"
+                }
+                Errores.ERROR_INTERCAMBIO_TOKEN -> {
+                    mensaje = "No se pudo completar el intercambio de Token en Foursquare"
+                }
 
             }
             Toast.makeText(context, mensaje, Toast.LENGTH_LONG).show()
