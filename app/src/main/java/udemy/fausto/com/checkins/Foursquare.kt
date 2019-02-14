@@ -12,6 +12,7 @@ class Foursquare (var activity : AppCompatActivity, var activityDestino: AppComp
     private val CLIENT_ID = "5MGLUW5CHINPZJWPWMZ5T1QQSBROF4IEGJSDVDBQ0WY3SW2J"
     private val CLIENT_SECRET = "FAL1KJ1UV5VEBCSQLCPI2HESLSXLFYZVFOPMLVXIG4DVPOOD"
     private val SETTINGS = "settings"
+    private val ACCESS_TOKEN = "accessToken"
 
     init {
 
@@ -66,9 +67,14 @@ class Foursquare (var activity : AppCompatActivity, var activityDestino: AppComp
 
         if (excepcion == null) {
             val accessToken = respuestaToken.accessToken
-            guardarToken()
 
-            navegarSiguienteActividad(activityDestino)
+            if (!guardarToken(accessToken)) {
+                Mensaje.mensajeError(activity.applicationContext, Errores.ERROR_GUARDAR_TOKEN)
+                navegarSiguienteActividad(activityDestino)  // ??????
+            }
+
+
+
 
         } else {
             Mensaje.mensajeError(activity.applicationContext, Errores.ERROR_INTERCAMBIO_TOKEN)
@@ -76,8 +82,38 @@ class Foursquare (var activity : AppCompatActivity, var activityDestino: AppComp
 
         }
 
+
     }
 
+    private fun hayToken () : Boolean {
+        if (obtenerToken() == "") {
+            return false
+        } else {
+            return true
+        }
 
+    }
+
+    fun obtenerToken(): String {
+        val settings = activity.getSharedPreferences(SETTINGS, 0)
+        val token = settings.getString(ACCESS_TOKEN, "")
+        return token
+
+    }
+
+    private fun guardarToken(token: String) : Boolean {
+        if (token.isEmpty()) return false
+        val settings = activity.getSharedPreferences(SETTINGS, 0)
+        val editor = settings.edit()
+        editor.putString(ACCESS_TOKEN, token)
+        editor.apply()
+        return true
+    }
+
+    private fun navegarSiguienteActividad(activityDest: AppCompatActivity) {
+        activity.startActivity(Intent(this.activity, activityDest::class.java))
+        activity.finish()
+
+    }
 
 }

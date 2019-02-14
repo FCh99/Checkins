@@ -30,6 +30,9 @@ class Mensaje {
                 Errores.ERROR_INTERCAMBIO_TOKEN -> {
                     mensaje = "No se pudo completar el intercambio de Token en Foursquare"
                 }
+                Errores.ERROR_GUARDAR_TOKEN -> {
+                    mensaje = "Error al guardar el Token"
+                }
 
             }
             Toast.makeText(context, mensaje, Toast.LENGTH_LONG).show()
