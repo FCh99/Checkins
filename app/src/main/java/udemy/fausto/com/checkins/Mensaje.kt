@@ -5,7 +5,11 @@ import android.widget.Toast
 
 class Mensaje {
     companion object {
-        fun mensajeSuccess() {
+        fun mensaje(context: Context, mensaje: Mensajes) {
+            var str = ""
+            when(mensaje) {
+                Mensajes.RATIONALE -> str = "Requiero permisos para obtener ubicación"
+            }
 
         }
 
@@ -32,6 +36,9 @@ class Mensaje {
                 }
                 Errores.ERROR_GUARDAR_TOKEN -> {
                     mensaje = "Error al guardar el Token"
+                }
+                Errores.PERMISO_NEGADO -> {
+                    mensaje = "No diste los permisos para obtener tu ubicación"
                 }
 
             }

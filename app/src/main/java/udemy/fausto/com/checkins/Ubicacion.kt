@@ -1,6 +1,7 @@
 package udemy.fausto.com.checkins
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.support.v4.app.ActivityCompat
@@ -52,8 +53,53 @@ class Ubicacion (activity: AppCompatActivity, ubicacionListener: UbicacionListen
     }
 
 
-    private fun pedirPermiso() {
+    private fun pedirPermisos() {
         val deboProveerContexto = ActivityCompat.shouldShowRequestPermissionRationale(activity, permisoFineLocation)
+        if (deboProveerContexto) {
+            // mandar un mensaje de explicación
+            Mensaje.mensaje(activity.applicationContext, Mensajes.RATIONALE)
+        }
+        solicitudPermiso()
+    }
+
+    private fun solicitudPermiso() {
+        ActivityCompat.requestPermissions(activity, arrayOf(permisoFineLocation, permisoCoarseLocation), CODIGO_SOLICITUD_UBICACION)
+
+    }
+
+    fun onRequestPermissionResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when(requestCode){
+            CODIGO_SOLICITUD_UBICACION -> {
+                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    obtenerUbicacion()
+                } else {
+                    Mensaje.mensajeError(activity.applicationContext, Errores.PERMISO_NEGADO)
+                }
+
+            }
+
+        }
+
+    }
+    fun detenerActualizacionUbicacion() {
+        this.fusedLocationClient?.removeLocationUpdates(callback)
+    }
+
+    fun inicializarUbicacion() {
+
+        if (validarPermisosUbicacion()) {
+            obtenerUbicacion()
+        } else {
+            pedirPermisos()
+
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun obtenerUbicacion() {
+        validarPermisosUbicacion()
+        fusedLocationClient?.requestLocationUpdates(locationRequest, callback, null)
+
     }
 
 }
